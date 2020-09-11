@@ -38,22 +38,55 @@ const reviews = [
   },
 ];
 
+// select items
+const image = document.getElementById('person-img');
+const author = document.getElementById('author');
+const job = document.getElementById('job');
+const info = document.getElementById('info');
 
-//get buttons
-const buttons = document.getElementsByTagName('button');
-const image = document.querySelector('#person-img');
+const prevBtn = document.querySelector('.prev-btn');
+const nextBtn = document.querySelector('.next-btn');
+const randBtn = document.querySelector('.random-btn');
 
-for (let index = 0; index < buttons.length; index++) {
-    buttons[index].addEventListener('click', (e)=> {
-      const buttonType = e.currentTarget.classList;
+// set initial item
+let currentItem = 0;
 
-      if(buttonType.contains('random-btn')){
-        image.src = reviews[getRandomNumber(reviews)].img;
-      }
-    });
-  
+// load initial item once DOM is ready
+window.addEventListener('DOMContentLoaded', showPerson(currentItem));
+
+// show next person
+nextBtn.addEventListener('click', () => {
+    currentItem++;
+    if( currentItem > reviews.length - 1){
+        currentItem = 0;
+    }
+    showPerson();
+})
+
+// show previous person
+prevBtn.addEventListener('click', () => {
+    currentItem--;
+    if (currentItem < 0) {
+        currentItem = reviews.length - 1;
+    }
+    showPerson();
+})
+
+// show person randomly
+randBtn.addEventListener('click', () => {
+    currentItem = getRandomNum(reviews);
+    showPerson();
+})
+
+
+function showPerson(){
+    const item = reviews[currentItem];
+    image.src = item.img;
+    author.textContent = item.name;
+    job.textContent = item.job;
+    info.textContent = item.text;
 }
 
-function getRandomNumber(arr){
-  return Math.floor(Math.random() * arr.length);
+function getRandomNum(arr){
+    return Math.floor(Math.random() * arr.length)
 }
